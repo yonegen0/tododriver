@@ -33,4 +33,4 @@ def get_user():
         # ユーザーオブジェクトを JSON に変換して返す
         return jsonify(plans_json), 200
     except Exception as e:
-        return jsonify({"error": "Failed to fetch user data", "details": str(e)}), 500
+        return "", 500
