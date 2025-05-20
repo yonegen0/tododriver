@@ -1,6 +1,6 @@
 from flask import Blueprint, request, current_app, jsonify
 import api.external as external
-from api.models.plan import User, Plan
+from api.models.task import User, Task
 
 app = Blueprint('todo_api', __name__)
 
@@ -19,18 +19,18 @@ def get_user():
                 external.db.session.add(user)
                 external.db.session.commit()
         
-        plans = external.db.session.query(Plan)\
-        .filter(Plan.user_id == user.id)
-        plans_json = {}
+        tasks = external.db.session.query(Task)\
+        .filter(Task.user_id == user.id)
+        tasks_json = {}
         # 取得した予定を辞書に格納
-        for plan in plans:
+        for task in tasks:
             # 各予定の情報を辞書に追加
-            plans_json[plan.id] = {
-                'plan_text': plan.plan_text,
-                'completed': plan.completed
+            tasks_json[task.id] = {
+                'task_text': task.task_text,
+                'completed': task.completed
             }
         
         # ユーザーオブジェクトを JSON に変換して返す
-        return jsonify(plans_json), 200
+        return jsonify(tasks_json), 200
     except Exception as e:
         return "", 500

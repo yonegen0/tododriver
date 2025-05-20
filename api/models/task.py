@@ -12,12 +12,12 @@ class User(db.Model):
     # ユーザーID
     id = db.Column(db.Integer, primary_key=True)
     # 予定の一覧
-    plans = db.relationship('Plan', backref='todolist', cascade="all, delete-orphan", lazy=True, uselist=True, foreign_keys='Plan.user_id')
+    tasks = db.relationship('Task', backref='todolist', cascade="all, delete-orphan", lazy=True, uselist=True, foreign_keys='Task.user_id')
 
-# Plan モデルの定義
-class Plan(db.Model):
+# Task モデルの定義
+class Task(db.Model):
     # テーブル名を設定
-    __tablename__ = 'plans'
+    __tablename__ = 'tasks'
     # テーブルに関する追加情報（コメント）
     __table_args__ = {
         'comment': '予定'
@@ -27,6 +27,6 @@ class Plan(db.Model):
     # ユーザーID
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     # 予定のテキスト
-    plan_text = db.Column(db.String(255), nullable=False)
+    task_text = db.Column(db.String(255), nullable=False)
     # 完了か否かの判定
     completed = db.Column(db.Boolean, default=False, nullable=False)
