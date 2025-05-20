@@ -34,3 +34,31 @@ def get_user():
         return jsonify(tasks_json), 200
     except Exception as e:
         return "", 500
+
+# タスク追加API    
+@app.route('/settask', methods=["POST"])
+def settask():
+    if request.is_json:
+        try:
+            data = request.get_json() # dataは辞書
+            for item in data: # リストの各要素（辞書）を処理
+                task_text = item['text']
+            # データベースから最初のユーザーを取得
+            user = external.db.session.query(User).first()
+            
+            # 新しい Task オブジェクトを作成
+            task = Task(
+                user_id = user.id,
+                task_text = task_text ,
+            )
+            # ユーザーの tasks リストに新しい予定を追加
+            user.tasks.append(task)
+            # データベースに変更をコミット
+            external.db.session.commit()
+
+            return "", 200
+        except Exception as e:
+            print("JSON データの処理中にエラーが発生しました:", e)
+            return "", 400
+    else:
+        return "", 400
