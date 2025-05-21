@@ -62,3 +62,25 @@ def settask():
             return "", 400
     else:
         return "", 400
+    
+# タスク削除API
+@app.route('/deletetask', methods=["POST"])
+def deletetask():
+    if request.is_json:
+        try:
+            data = request.get_json() # dataは辞書
+            # 'id' を取得し、整数に変換
+            for item in data:
+                id_value = item.get('id')
+            if id_value is not None:
+                id = int(id_value)  
+            # 予定削除
+            external.db.session.query(Task).filter(Task.id == id).delete()
+            external.db.session.commit()
+
+            return "", 200
+        except Exception as e:
+            print("JSON データの処理中にエラーが発生しました:", e)
+            return "", 400
+    else:
+        return "", 400
